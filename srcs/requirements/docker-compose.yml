@@ -1,0 +1,65 @@
+version: '3.5'
+services:
+  ngnix:
+    container_name: ngnix
+    build: ./nginx/
+    restart: always
+    volumes:
+     - WordPress:/var/www/html
+    depends_on:
+      - wordpress
+    ports:
+      - "443:443"
+    networks:
+      - mynetwork
+
+  wordpress:
+    container_name: wordpress
+    build: ./wordpress/
+    restart: always
+    volumes:
+     - WordPress:/var/www/html
+    networks:
+     - mynetwork
+ 
+  adminer:
+    container_name: Adminer     # Name redirect to IP -> 172.X.X.Z
+    build: adminer/.            # Build the dockerfile in ./adminer/Dockerfile 
+    restart: always             # Restart the container if it has stopped
+    ports:
+      - "80:80"                 # Redirect port 80 of Adminer on the host
+    networks:
+      - mynetwork               # Use mynetwork for communicate with mariadb
+  
+  mariadb:
+    container_name: Mariadb
+    build: mariadb/.
+    restart: always
+    networks:
+      - mynetwork
+    volumes:
+      - db:/var/lib/mysql
+    env_file: .env
+ 
+# NETWORK
+networks:
+  mynetwork:
+    name : mynetwork
+    driver : bridge
+
+# VOLUME
+volumes:
+  WordPress:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: /home/bbird/data/website
+
+  db:
+    driver: local
+    driver_opts:            # Options specific to the driver
+      type: 'none'
+      o: 'bind'
+      device: ./my_volume   # Persistent volume
+
