@@ -27,7 +27,7 @@ services:
     build: adminer/.            # Build the dockerfile in ./adminer/Dockerfile 
     restart: always             # Restart the container if it has stopped
     ports:
-      - "80:80"                 # Redirect port 80 of Adminer on the host
+      - "8080:8080"                 # Redirect port 8080 of Adminer on the host
     networks:
       - mynetwork               # Use mynetwork for communicate with mariadb
   
@@ -39,7 +39,7 @@ services:
       - mynetwork
     volumes:
       - db:/var/lib/mysql
-    env_file: /home/bbird/Inception/srcs/.env
+    env_file: .env
  
 # NETWORK
 networks:
@@ -54,12 +54,12 @@ volumes:
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: /home/bbird/data/website
+      device: /home/bbird/data/website   # Create this folder in the Makefile
 
   db:
     driver: local
-    driver_opts:            # Options specific to the driver
+    driver_opts:                          # Options specific to the driver
       type: 'none'
       o: 'bind'
-      device: ./my_volume   # Persistent volume
+      device: /home/bbird/data/db        # Create this folder in the Makefile
 
