@@ -39,7 +39,7 @@ services:
       - mynetwork
     volumes:
       - db:/var/lib/mysql
-    env_file: .env
+    env_file: /home/bbird/Inception/srcs/.env
  
 # NETWORK
 networks:
