@@ -2,7 +2,11 @@ FROM debian:buster
 RUN apt-get update
 # UDPATE & INSTALLATION
 
+WORKDIR /var/www/html
+
 RUN apt install -y wget
+
+RUN echo "Hello" > Hello
 
 RUN apt install -y php-fpm\
  php7.3\
@@ -10,8 +14,6 @@ RUN apt install -y php-fpm\
  mariadb-client
 
 RUN wget https://fr.wordpress.org/wordpress-6.0-fr_FR.tar.gz
-
-RUN echo "Hello" > Hello
 
 RUN tar -xzf wordpress-6.0-fr_FR.tar.gz && rm wordpress-6.0-fr_FR.tar.gz
 
@@ -31,4 +33,3 @@ EXPOSE 9000
 
 ENTRYPOINT ["/usr/sbin/php-fpm7.3","-F" ]
 
-WORKDIR /var/www/html
